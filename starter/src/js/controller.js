@@ -1,5 +1,10 @@
 import icons from '../img/icons.svg';
 import * as model from '../js/model';
+import recipeView from './views/RecipeView';
+import resultView from './views/ResultView';
+console.log(recipeView);
+console.log(resultView);
+console.log(model);
 // console.log(icons);
 
 const recipeContainer = document.querySelector('.recipe');
@@ -22,19 +27,6 @@ const timeout = function (s) {
 
 ///////////////////////////////////////
 // #rendering recipes
-
-const renderSpinner = function (parentEl) {
-	const html = `<div class="spinner">
-          <svg>
-            <use href="${icons}#icon-loader"></use>
-          </svg>
-        </div>`;
-
-	parentEl.insertAdjacentHTML('afterbegin', html);
-};
-const endSpinner = function (patentEl) {
-	patentEl.querySelector('.spinner')?.remove();
-};
 
 const renderError = function () {
 	recipeContainer.innerHTML = '';
@@ -143,7 +135,7 @@ const showRecipe = async function (id) {
 	try {
 		if (id == '') return;
 		recipeContainer.innerHTML = '';
-		renderSpinner(recipeContainer);
+		recipeView.renderSpinner();
 
 		const resp = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
 		const data = await resp.json();
@@ -151,7 +143,7 @@ const showRecipe = async function (id) {
 		if (!resp.ok) throw Error(data.message);
 		renderRecipe(data.data.recipe);
 
-		endSpinner(recipeContainer);
+		recipeView.endSpinner(recipeContainer);
 	} catch (err) {
 		console.error(err.message);
 		renderError();
@@ -161,24 +153,10 @@ const showRecipe = async function (id) {
 
 ////////////////////////////////////////
 // #rendering search results
-
-const fetchSearchResults = async function (search) {
-	try {
-		const resp = await fetch(
-			`https://forkify-api.herokuapp.com/api/v2/recipes?search=${search}`
-		);
-		const data = await resp.json();
-		return data;
-	} catch (err) {
-		console.log(err);
-	}
-};
-
-const showResults = async function (search) {
-	renderSpinner(resultsList);
-	const {
-		data: { recipes: results },
-	} = await fetchSearchResults(search);
+const showSearchResults = async function (search) {
+	resultView.renderSpinner();
+	await model.fetchSearchResults(search);
+	const results = model.state.searchResults;
 
 	resultsList.innerHTML = '';
 	results.forEach(res => {
@@ -195,9 +173,8 @@ const showResults = async function (search) {
           </li>`;
 		resultsList.insertAdjacentHTML('beforeend', html);
 	});
-	endSpinner(resultsList);
+	resultView.endSpinner();
 };
-
 ///////////////////////////////////////////
 // #event handlers
 
@@ -205,7 +182,7 @@ searchBtn.addEventListener('click', ev => {
 	ev.preventDefault();
 	if (searchField.value == '') return;
 
-	showResults(searchField.value);
+	showSearchResults(searchField.value);
 	searchField.blur();
 });
 
@@ -221,5 +198,3 @@ resultsList.addEventListener('click', ev => {
 		showRecipe(id);
 	});
 });
-
-console.log('test test test');
