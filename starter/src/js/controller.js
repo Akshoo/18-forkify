@@ -221,3 +221,5 @@ resultsList.addEventListener('click', ev => {
 		showRecipe(id);
 	});
 });
+
+console.log('test test test');
