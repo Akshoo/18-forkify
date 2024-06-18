@@ -4,7 +4,11 @@ export default class View {
 	constructor(el) {
 		this._parentEl = el;
 	}
+	_clear() {
+		this._parentEl.innerHTML = '';
+	}
 	renderSpinner() {
+		this._clear();
 		const html = `<div class="spinner">
           <svg>
             <use href="${icons}#icon-loader"></use>
@@ -13,7 +17,18 @@ export default class View {
 
 		this._parentEl.insertAdjacentHTML('afterbegin', html);
 	}
-	endSpinner(patentEl) {
-		patentEl.querySelector('.spinner')?.remove();
+	renderError(message) {
+		this._clear();
+
+		const html = `<div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}!</p>
+      </div>`;
+
+		this._parentEl.insertAdjacentHTML('afterbegin', html);
 	}
 }

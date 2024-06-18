@@ -1,18 +1,42 @@
+import { API_URL, FETCH_RECIPE_ERR, FETCH_SEARCH_RES_ERR } from './config';
+import { fetchJson } from './helper';
+
 export const state = {
-	searchResults: {},
+	recipe: {},
+	search: {
+		query: '',
+		results: [],
+	},
+	results: {
+		clickedResultEl: null,
+	},
 };
 
-export const fetchSearchResults = async function (search) {
+export const fetchSearchResults = async function (query) {
 	try {
-		const resp = await fetch(
-			`https://forkify-api.herokuapp.com/api/v2/recipes?search=${search}`
-		);
-		const data = await resp.json();
-		state.searchResults = data.data.recipes;
-		console.log(state);
-		// return data;
+		if (!query) return;
+
+		const data = await fetchJson(`${API_URL}?search=${query}`);
+
+		if (data.data.recipes.length == 0) throw Error(`${FETCH_SEARCH_RES_ERR}`);
+
+		state.search.query = query;
+		state.search.results = data.data.recipes;
 	} catch (err) {
-		console.log(err);
+		console.error(err, '💥💥');
+		throw err;
 	}
 };
-// _fetchSearchResults('pizza');
+export const fetchRecipe = async function (id) {
+	try {
+		if (!id) return;
+		const data = await fetchJson(`${API_URL}/${id}`);
+
+		if (data.status == 'fail') throw Error(data.message);
+
+		state.recipe = data.data.recipe;
+	} catch (err) {
+		console.error(err.message, '💥💥');
+		throw Error(`${FETCH_RECIPE_ERR}`);
+	}
+};
