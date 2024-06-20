@@ -7,11 +7,22 @@ const timeout = function (s) {
 		}, s * 1000);
 	});
 };
+
+// true if no ongoing api calls
+let clear = true;
 export const fetchJson = async function (url) {
 	try {
+		// only fetch if there is no other ongoing api call
+		if (!clear) throw Error('Cannot Fetch.  💥💥');
+
+		clear = false;
 		const resp = await Promise.race([fetch(`${url}`), timeout(TIMEOUT_SEC)]);
-		return await resp.json();
+		const data = await resp.json();
+		clear = true;
+
+		return data;
 	} catch (err) {
+		clear = true;
 		throw err;
 	}
 };

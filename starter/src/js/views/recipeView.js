@@ -6,22 +6,17 @@ class RecipeView extends View {
 	constructor() {
 		super(document.querySelector('.recipe'));
 	}
-	renderRecipe(data) {
-		this._clear();
-		const markup = this._generateMarkup(data);
 
-		this._clear();
-		this._parentEl.insertAdjacentHTML('beforeend', markup);
-	}
 	addRecipeHandler(handler) {
 		['hashchange', 'load'].forEach(onE => {
 			window.addEventListener(onE, handler);
 		});
 	}
-	_generateMarkup(data) {
-		// if (data == null) return;
 
-		return `<figure class="recipe__fig">
+	_generateMarkup() {
+		const data = this._data;
+		return `
+    <figure class="recipe__fig">
         <img src="${data.image_url}" alt="${data.title}" class="recipe__img" />
         <h1 class="recipe__title">
           <span>${data.title}</span>
@@ -72,22 +67,7 @@ class RecipeView extends View {
       <div class="recipe__ingredients">
         <h2 class="heading--2">Recipe ingredients</h2>
         <ul class="recipe__ingredient-list">
-        ${data.ingredients
-			.map(
-				ing => `<li class="recipe__ingredient">
-            <svg class="recipe__icon">
-              <use href="${icons}#icon-check"></use>
-            </svg>
-            <div class="recipe__quantity">${
-				ing.quantity == null ? '' : new Fraction(ing.quantity).toString()
-			}</div>
-            <div class="recipe__description">
-              <span class="recipe__unit">${ing.unit}</span>
-              ${ing.description}
-            </div>
-          </li>`
-			)
-			.join(' ')}
+        ${data.ingredients.map(ing => this._generateIngredientMarkup(ing)).join('')}
         </ul>
       </div>
 
@@ -106,6 +86,21 @@ class RecipeView extends View {
           </svg>
         </a>
       </div>`;
+	}
+	_generateIngredientMarkup(ing) {
+		return `
+    <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+              <use href="${icons}#icon-check"></use>
+            </svg>
+            <div class="recipe__quantity">${
+				ing.quantity == null ? '' : new Fraction(ing.quantity).toString()
+			}</div>
+            <div class="recipe__description">
+              <span class="recipe__unit">${ing.unit}</span>
+              ${ing.description}
+            </div>
+      </li>`;
 	}
 }
 export default new RecipeView();

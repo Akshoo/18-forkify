@@ -4,19 +4,14 @@ class ResultView extends View {
 	constructor() {
 		super(document.querySelector('.results'));
 	}
-	async renderResults(results) {
-		this._clear();
-		const markup = this._generateMarkup(results);
-		this._parentEl.insertAdjacentHTML('beforeend', markup);
-	}
 
 	addResultHandler(handler) {
 		this._parentEl.addEventListener('click', handler);
 	}
 
-	_generateMarkup(results) {
+	_generateMarkup() {
 		let markup = '';
-		results.forEach(res => {
+		this._data.forEach(res => {
 			markup += `<li class="preview">
             <a class="preview__link " href="#${res.id}">
               <figure class="preview__fig">
