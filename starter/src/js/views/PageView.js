@@ -1,69 +1,60 @@
 import icons from '../../img/icons.svg';
-class PageView {
-	_parentEl = document.querySelector('.pagination');
+import View from './View';
+
+class PageView extends View {
 	_nextBtn;
 	_prevBtn;
-	_maxPno = 0;
-	_prevPno = 0;
-	_nextPno = 2;
 
-	renderPageBtns(maxPno = this._maxPno) {
-		this._maxPno = maxPno;
-		this._clear();
-		const markup = this._generateMarkup();
-		this._parentEl.insertAdjacentHTML('afterbegin', markup);
-		this._nextBtn = this._parentEl.querySelector('.pagination__btn--next');
-		this._prevBtn = this._parentEl.querySelector('.pagination__btn--prev');
+	constructor() {
+		super(document.querySelector('.pagination'));
 	}
 	clicked(btn) {
+		this._prevBtn = this._parentEl.querySelector('.pagination__btn--prev');
+		this._nextBtn = this._parentEl.querySelector('.pagination__btn--next');
 		if (btn == this._nextBtn) {
-			this.clickedNext();
-			return 1;
+			this._data.pageNo++;
 		}
 		if (btn == this._prevBtn) {
-			this.clickedPrev();
-			return -1;
+			this._data.pageNo--;
 		}
+		this.render(this._data);
 	}
 	addPageHandler(handler) {
-		this._parentEl.addEventListener('click', handler);
+		this._parentEl.addEventListener('click', function (ev) {
+			const clickedBtn = ev.target.closest('.btn--inline');
+			if (!clickedBtn) return;
+
+			handler(+clickedBtn.dataset.goto);
+		});
 	}
-	clickedNext() {
-		this._nextPno++;
-		this._prevPno++;
-		this.renderPageBtns();
-	}
-	clickedPrev() {
-		this._nextPno--;
-		this._prevPno--;
-		this.renderPageBtns();
-	}
+
 	_generateMarkup() {
-		return `${this._generatePrev()}${this._generateNext()}`;
+		return `${this._generatePrev()} ${this._generateNext()}`;
 	}
 	_generatePrev() {
-		if (this._prevPno <= 0) return ``;
+		if (this._data.pageNo <= 1) return ``;
 
-		return `<button class="btn--inline pagination__btn--prev">
+		return `<button data-goto="${
+			this._data.pageNo - 1
+		}" class="btn--inline pagination__btn--prev">
               <svg class="search__icon">
               <use href="${icons}#icon-arrow-left"></use>
               </svg>
-            <span>Page ${this._prevPno}</span>
+            <span>Page ${this._data.pageNo - 1}</span>
           </button>`;
 	}
 	_generateNext() {
-		if (this._nextPno > this._maxPno) return ``;
+		if (this._data.pageNo >= this._data.maxPageNo) return ``;
 
-		return `<button class="btn--inline pagination__btn--next">
-            <span>Page ${this._nextPno}</span>
+		return `<button data-goto="${
+			this._data.pageNo + 1
+		}" class="btn--inline pagination__btn--next">
+            <span>Page ${this._data.pageNo + 1}</span>
             <svg class="search__icon">
               <use href="${icons}#icon-arrow-right"></use>
             </svg>
             
           </button>`;
-	}
-	_clear() {
-		this._parentEl.innerHTML = '';
 	}
 }
 export default new PageView();

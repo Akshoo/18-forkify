@@ -32,7 +32,6 @@ export const loadSearchResults = async function (query) {
 };
 export const loadRecipe = async function (id) {
 	try {
-		if (!id) throw Error('Empty Id 💥💥');
 		const data = await fetchJson(`${API_URL}/${id}`);
 
 		if (data.status == 'fail') throw Error(data.message);
@@ -44,11 +43,8 @@ export const loadRecipe = async function (id) {
 	}
 };
 
-export const getResultsPage = function (pageNo = state.page.pageNo) {
+export const getResultsPage = function (pageNo) {
+	state.page.pageNo = pageNo;
 	const n = PAGE_SLOTS;
-
-	console.log(state.page);
-	console.log(state.search.results.slice((pageNo - 1) * n, pageNo * n));
-
 	return state.search.results.slice((pageNo - 1) * n, pageNo * n);
 };
