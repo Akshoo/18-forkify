@@ -5,8 +5,8 @@ import searchView from './views/SearchView';
 import pageView from './views/PageView';
 
 // https://forkify-api.herokuapp.com/v2
-//https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886
-//https://forkify-api.herokuapp.com/api/v2/recipes/664c8f193e7aa067e94e8706
+// https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886
+// https://forkify-api.herokuapp.com/api/v2/recipes/664c8f193e7aa067e94e8706
 
 // if (module.hot) module.hot.accept();
 ///////////////////////////////////////
@@ -16,9 +16,11 @@ const resultHandler = function (ev) {
 	model.state.page.clickedResultEl = ev.target.closest('.preview');
 	model.state.page.clickedResultEl.classList.add('preview__link--active');
 };
-const recipeHandler = async function () {
-	const id = window.location.hash.slice(1);
-
+const servingsHandler = function (serving) {
+	model.loadIngredientsPerServe(serving);
+	recipeView.renderUpdatedIngredients();
+};
+const recipeHandler = async function (id) {
 	if (!id) return recipeView.renderMessage();
 
 	recipeView.renderSpinner();
@@ -48,6 +50,8 @@ const pageHandler = function (goToPage) {
 
 const init = function () {
 	recipeView.addRecipeHandler(recipeHandler);
+	recipeView.addServingsHandler(servingsHandler);
+
 	resultView.addResultHandler(resultHandler);
 	searchView.addSearchHandler(searchHandler);
 	pageView.addPageHandler(pageHandler);

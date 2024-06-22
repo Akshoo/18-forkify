@@ -22,6 +22,7 @@ export const loadSearchResults = async function (query) {
 
 		if (data.data.recipes.length === 0) throw Error(`${FETCH_SEARCH_RES_ERR}`);
 
+		//update state
 		state.search.query = query;
 		state.search.results = data.data.recipes;
 		state.page.maxPageNo = Math.ceil(data.data.recipes.length / PAGE_SLOTS);
@@ -36,6 +37,7 @@ export const loadRecipe = async function (id) {
 
 		if (data.status == 'fail') throw Error(data.message);
 
+		//update state
 		state.recipe = data.data.recipe;
 	} catch (err) {
 		console.error(err.message, '💥💥');
@@ -47,4 +49,16 @@ export const getResultsPage = function (pageNo) {
 	state.page.pageNo = pageNo;
 	const n = PAGE_SLOTS;
 	return state.search.results.slice((pageNo - 1) * n, pageNo * n);
+};
+
+export const loadIngredientsPerServe = function (serve) {
+	if (serve <= 0) return;
+	const currentServe = state.recipe.servings;
+
+	//update state
+	state.recipe.ingredients.forEach(ing => {
+		if (ing.quantity == null) return;
+		ing.quantity = (ing.quantity / currentServe) * serve;
+	});
+	state.recipe.servings = serve;
 };

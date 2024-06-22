@@ -7,9 +7,35 @@ class RecipeView extends View {
 		super(document.querySelector('.recipe'));
 	}
 
+	renderUpdatedIngredients() {
+		this._updateServings();
+		const markup = this._generateIngredientMarkup(this._data.ingredients);
+		const ingredientList = this._parentEl.querySelector('.recipe__ingredient-list');
+
+		ingredientList.innerHTML = '';
+		ingredientList.insertAdjacentHTML('afterbegin', markup);
+	}
+	_updateServings() {
+		const markup = this._generateServingsMarkup();
+		const servingsEl = this._parentEl.querySelector('.recipe__info-servings');
+
+		servingsEl.innerHTML = '';
+		servingsEl.insertAdjacentHTML('afterbegin', markup);
+	}
+
 	addRecipeHandler(handler) {
 		['hashchange', 'load'].forEach(onE => {
-			window.addEventListener(onE, handler);
+			window.addEventListener(onE, () => {
+				handler(window.location.hash.slice(1));
+			});
+		});
+	}
+	addServingsHandler(handler) {
+		this._parentEl.addEventListener('click', ev => {
+			const clicked = ev.target.closest('.btn-update-servings');
+			if (!clicked) return;
+
+			handler(+clicked.dataset.gotoserve);
 		});
 	}
 
@@ -24,35 +50,18 @@ class RecipeView extends View {
       </figure>
 
       <div class="recipe__details">
-        <div class="recipe__info">
+        <div class="recipe__info ">
           <svg class="recipe__info-icon">
             <use href="${icons}#icon-clock"></use>
           </svg>
           <span class="recipe__info-data recipe__info-data--minutes">${data.cooking_time}</span>
           <span class="recipe__info-text">minutes</span>
         </div>
-        <div class="recipe__info">
-          <svg class="recipe__info-icon">
-            <use href="${icons}#icon-users"></use>
-          </svg>
-          <span class="recipe__info-data recipe__info-data--people">${data.servings}</span>
-          <span class="recipe__info-text">servings</span>
-
-          <div class="recipe__info-buttons">
-            <button class="btn--tiny btn--increase-servings">
-              <svg>
-                <use href="${icons}#icon-minus-circle"></use>
-              </svg>
-            </button>
-            <button class="btn--tiny btn--increase-servings">
-              <svg>
-                <use href="${icons}#icon-plus-circle"></use>
-              </svg>
-            </button>
-          </div>
+        <div class="recipe__info recipe__info-servings">
+          ${this._generateServingsMarkup(data.servings)}
         </div>
 
-        <div class="recipe__user-generated">
+        <div class="recipe__user-generated hidden">
           <svg>
             <use href="${icons}#icon-user"></use>
           </svg>
@@ -67,7 +76,7 @@ class RecipeView extends View {
       <div class="recipe__ingredients">
         <h2 class="heading--2">Recipe ingredients</h2>
         <ul class="recipe__ingredient-list">
-        ${data.ingredients.map(ing => this._generateIngredientMarkup(ing)).join('')}
+        ${this._generateIngredientMarkup(data.ingredients)}
         </ul>
       </div>
 
@@ -87,8 +96,38 @@ class RecipeView extends View {
         </a>
       </div>`;
 	}
-	_generateIngredientMarkup(ing) {
+	_generateServingsMarkup() {
+		const servings = this._data.servings;
 		return `
+          <svg class="recipe__info-icon">
+            <use href="${icons}#icon-users"></use>
+          </svg>
+          <span class="recipe__info-data recipe__info-data--people">${servings}</span>
+          <span class="recipe__info-text">servings</span>
+
+          <div class="recipe__info-buttons">
+            <button data-gotoserve="${
+				servings - 1
+			}" class="btn--tiny btn-update-servings btn--decrease-servings">
+              <svg>
+                <use href="${icons}#icon-minus-circle"></use>
+              </svg>
+            </button>
+            <button data-gotoserve="${
+				servings + 1
+			}" class="btn--tiny btn-update-servings btn--increase-servings">
+              <svg>
+                <use href="${icons}#icon-plus-circle"></use>
+              </svg>
+            </button>
+          </div>
+    `;
+	}
+	_generateIngredientMarkup() {
+		const ingredients = this._data.ingredients;
+		return ingredients
+			.map(
+				ing => `
     <li class="recipe__ingredient">
             <svg class="recipe__icon">
               <use href="${icons}#icon-check"></use>
@@ -100,7 +139,9 @@ class RecipeView extends View {
               <span class="recipe__unit">${ing.unit}</span>
               ${ing.description}
             </div>
-      </li>`;
+      </li>`
+			)
+			.join('');
 	}
 }
 export default new RecipeView();

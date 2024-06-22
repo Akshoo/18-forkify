@@ -8,17 +8,7 @@ class PageView extends View {
 	constructor() {
 		super(document.querySelector('.pagination'));
 	}
-	clicked(btn) {
-		this._prevBtn = this._parentEl.querySelector('.pagination__btn--prev');
-		this._nextBtn = this._parentEl.querySelector('.pagination__btn--next');
-		if (btn == this._nextBtn) {
-			this._data.pageNo++;
-		}
-		if (btn == this._prevBtn) {
-			this._data.pageNo--;
-		}
-		this.render(this._data);
-	}
+
 	addPageHandler(handler) {
 		this._parentEl.addEventListener('click', function (ev) {
 			const clickedBtn = ev.target.closest('.btn--inline');
