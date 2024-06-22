@@ -45,9 +45,10 @@ export const loadRecipe = async function (id) {
 	}
 };
 
-export const getResultsPage = function (pageNo) {
+export const getResultsPage = function (pageNo = state.page.pageNo) {
 	state.page.pageNo = pageNo;
 	const n = PAGE_SLOTS;
+	console.log(state.search);
 	return state.search.results.slice((pageNo - 1) * n, pageNo * n);
 };
 

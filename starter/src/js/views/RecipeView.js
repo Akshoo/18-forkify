@@ -3,6 +3,16 @@ import icons from '../../img/icons.svg';
 import 'fractional';
 
 class RecipeView extends View {
+	// this._data is{
+	// cooking_time: ,
+	// id: "",
+	// image_url: "",
+	// ingredients: [],
+	// publisher: "",
+	// servings: ,
+	// source_url: "",
+	// title: "",
+	// }
 	constructor() {
 		super(document.querySelector('.recipe'));
 	}

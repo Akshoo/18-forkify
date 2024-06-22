@@ -2,6 +2,11 @@ import icons from '../../img/icons.svg';
 import View from './View';
 
 class PageView extends View {
+	//  this._data is {
+	// 	clickedResultEl: null,
+	// 	pageNo: 1,
+	// 	maxPageNo: 0,
+	// };
 	_nextBtn;
 	_prevBtn;
 

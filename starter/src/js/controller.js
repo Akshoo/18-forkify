@@ -11,14 +11,11 @@ import pageView from './views/PageView';
 // if (module.hot) module.hot.accept();
 ///////////////////////////////////////
 
-const resultHandler = function (ev) {
-	model.state.page.clickedResultEl?.classList.remove('preview__link--active');
-	model.state.page.clickedResultEl = ev.target.closest('.preview');
-	model.state.page.clickedResultEl.classList.add('preview__link--active');
-};
 const servingsHandler = function (serving) {
 	model.loadIngredientsPerServe(serving);
-	recipeView.renderUpdatedIngredients();
+	//updating
+	recipeView.update();
+	// recipeView.renderUpdatedIngredients();
 };
 const recipeHandler = async function (id) {
 	if (!id) return recipeView.renderMessage();
@@ -27,6 +24,8 @@ const recipeHandler = async function (id) {
 	try {
 		await model.loadRecipe(id);
 		recipeView.render(model.state.recipe);
+
+		resultView.update(model.getResultsPage());
 	} catch (err) {
 		recipeView.renderError(err.message);
 		console.error(err);
@@ -36,7 +35,7 @@ const searchHandler = async function (query) {
 	resultView.renderSpinner();
 	try {
 		await model.loadSearchResults(query);
-		resultView.render(model.getResultsPage(model.state.page.pageNo));
+		resultView.render(model.getResultsPage());
 		pageView.render(model.state.page);
 	} catch (err) {
 		resultView.renderError(err.message);
@@ -52,7 +51,6 @@ const init = function () {
 	recipeView.addRecipeHandler(recipeHandler);
 	recipeView.addServingsHandler(servingsHandler);
 
-	resultView.addResultHandler(resultHandler);
 	searchView.addSearchHandler(searchHandler);
 	pageView.addPageHandler(pageHandler);
 };
