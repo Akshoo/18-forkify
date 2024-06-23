@@ -42,7 +42,7 @@ export default class View {
 				newEl.firstChild?.nodeValue.trim() !== null &&
 				newEl.firstChild?.nodeValue.trim() !== ''
 			) {
-				console.log(newEl.firstChild?.nodeValue);
+				// console.log(newEl.firstChild?.nodeValue);
 				// curEl.firstChild.nodeValue = newEl.firstChild?.nodeValue;
 				curEl.textContent = newEl.textContent;
 			}

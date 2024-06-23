@@ -17,21 +17,21 @@ class RecipeView extends View {
 		super(document.querySelector('.recipe'));
 	}
 
-	renderUpdatedIngredients() {
-		this._updateServings();
-		const markup = this._generateIngredientMarkup(this._data.ingredients);
-		const ingredientList = this._parentEl.querySelector('.recipe__ingredient-list');
+	// renderUpdatedIngredients() {
+	// 	this._updateServings();
+	// 	const markup = this._generateIngredientMarkup(this._data.ingredients);
+	// 	const ingredientList = this._parentEl.querySelector('.recipe__ingredient-list');
 
-		ingredientList.innerHTML = '';
-		ingredientList.insertAdjacentHTML('afterbegin', markup);
-	}
-	_updateServings() {
-		const markup = this._generateServingsMarkup();
-		const servingsEl = this._parentEl.querySelector('.recipe__info-servings');
+	// 	ingredientList.innerHTML = '';
+	// 	ingredientList.insertAdjacentHTML('afterbegin', markup);
+	// }
+	// _updateServings() {
+	// 	const markup = this._generateServingsMarkup();
+	// 	const servingsEl = this._parentEl.querySelector('.recipe__info-servings');
 
-		servingsEl.innerHTML = '';
-		servingsEl.insertAdjacentHTML('afterbegin', markup);
-	}
+	// 	servingsEl.innerHTML = '';
+	// 	servingsEl.insertAdjacentHTML('afterbegin', markup);
+	// }
 
 	addRecipeHandler(handler) {
 		['hashchange', 'load'].forEach(onE => {
@@ -46,6 +46,13 @@ class RecipeView extends View {
 			if (!clicked) return;
 
 			handler(+clicked.dataset.gotoserve);
+		});
+	}
+	addBookmarksHandler(handler) {
+		this._parentEl.addEventListener('click', ev => {
+			const clicked = ev.target.closest('.btn--bookmark');
+			if (!clicked) return;
+			handler();
 		});
 	}
 
@@ -76,9 +83,9 @@ class RecipeView extends View {
             <use href="${icons}#icon-user"></use>
           </svg>
         </div>
-        <button class="btn--round">
+        <button class="btn--round btn--bookmark">
           <svg class="">
-            <use href="${icons}#icon-bookmark-fill"></use>
+            <use href="${icons}#icon-bookmark${data.bookmarked ? '-fill' : ''}"></use>
           </svg>
         </button>
       </div>
