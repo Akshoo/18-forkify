@@ -25,6 +25,7 @@ export const loadSearchResults = async function (query) {
 		//update state
 		state.search.query = query;
 		state.search.results = data.data.recipes;
+		state.page.pageNo = 1;
 		state.page.maxPageNo = Math.ceil(data.data.recipes.length / PAGE_SLOTS);
 	} catch (err) {
 		console.error(err, '💥💥');

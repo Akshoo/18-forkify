@@ -57,3 +57,4 @@ const init = function () {
 	pageView.addPageHandler(pageHandler);
 };
 init();
+// console.log(model.state);
