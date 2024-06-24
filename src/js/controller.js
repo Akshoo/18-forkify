@@ -14,25 +14,27 @@ import bookmarksView from './views/BookmarksView';
 
 const servingsHandler = function (serving) {
 	model.loadIngredientsPerServe(serving);
-	recipeView.update();
+	recipeView.update(model.state.recipe);
 };
 const bookmarksHandler = function () {
+	console.log(model.state.recipe.bookmarked);
 	if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
 	else model.deleteBookmark(model.state.recipe.id);
 
 	recipeView.update();
 	bookmarksView.render(model.state.bookmarks);
-	console.log(model.state);
 };
 const recipeHandler = async function (id) {
 	if (!id) return recipeView.renderMessage();
 
 	recipeView.renderSpinner();
 	try {
+		model.loadSavedBookmarks();
+		bookmarksView.render(model.state.bookmarks);
+
 		await model.loadRecipe(id);
 		recipeView.render(model.state.recipe);
 		resultView.update(model.getResultsPage());
-		bookmarksView.update();
 	} catch (err) {
 		recipeView.renderError(err.message);
 		console.error(err);
@@ -63,3 +65,4 @@ const init = function () {
 	pageView.addPageHandler(pageHandler);
 };
 init();
+// localStorage.clear();

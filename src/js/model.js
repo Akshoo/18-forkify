@@ -69,9 +69,24 @@ export const loadIngredientsPerServe = function (serve) {
 export const addBookmark = function (recipe) {
 	recipe.bookmarked = true;
 	state.bookmarks.push(recipe);
+	_saveBookmarks();
 };
 export const deleteBookmark = function (id) {
 	const delIndex = state.bookmarks.findIndex(bmark => bmark.id == id);
-	state.bookmarks[delIndex].bookmarked = false;
+
+	if (state.recipe.id == state.bookmarks[delIndex].id) state.recipe.bookmarked = false;
+
 	state.bookmarks.splice(delIndex, 1);
+	_saveBookmarks();
+};
+
+const _saveBookmarks = function () {
+	const bookmarksString = JSON.stringify(state.bookmarks);
+	localStorage.setItem('bookmarks', bookmarksString);
+};
+
+export const loadSavedBookmarks = function () {
+	const bookmarksString = localStorage.getItem('bookmarks');
+	if (!bookmarksString) return;
+	state.bookmarks = JSON.parse(bookmarksString);
 };
