@@ -1,5 +1,7 @@
+
 import 'corejs/stable';
 import 'regenerator-runtime/runtime';
+
 
 import * as model from '../js/model';
 import resultView from './views/ResultView';
@@ -7,20 +9,23 @@ import recipeView from './views/RecipeView';
 import searchView from './views/SearchView';
 import pageView from './views/PageView';
 import bookmarksView from './views/BookmarksView';
+
 import userRecipeView from './views/UserRecipeView';
 import { LOAD_BOOKMARKS_MSG } from './config';
+
 
 // https://forkify-api.herokuapp.com/v2
 // https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886
 // https://forkify-api.herokuapp.com/api/v2/recipes/664c8f193e7aa067e94e8706
 
 // if (module.hot) module.hot.accept();
+
 //////////////////////////////////////////////////////////////
 
 const servingsHandler = function (serving) {
 	model.loadIngredientsPerServe(serving);
 	recipeView.update(model.state.recipe);
-};
+
 const bookmarksHandler = function () {
 	if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
 	else model.deleteBookmark(model.state.recipe.id);
@@ -35,11 +40,13 @@ const recipeHandler = async function (id) {
 	else bookmarksView.render(model.state.bookmarks);
 
 	if (!id) return recipeView.renderMessage();
+
 	recipeView.renderSpinner();
 	try {
 		await model.loadRecipe(id);
 		recipeView.render(model.state.recipe);
 		resultView.update(model.getResultsPage());
+
 	} catch (err) {
 		recipeView.renderError(err.message);
 		console.error(err);
@@ -82,6 +89,7 @@ const userRecipeViewHandler = async function (data) {
 };
 
 ////////////////////////////////////////////////////////////
+
 const init = function () {
 	recipeView.addRecipeHandler(recipeHandler);
 	recipeView.addServingsHandler(servingsHandler);
@@ -93,3 +101,4 @@ const init = function () {
 };
 init();
 // localStorage.clear();
+

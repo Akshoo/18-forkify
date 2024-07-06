@@ -1,5 +1,6 @@
 import { API_KEY, TIMEOUT_ERR, TIMEOUT_SEC } from './config';
 
+
 const timeout = function (s) {
 	return new Promise(function (_, reject) {
 		setTimeout(function () {
@@ -26,6 +27,7 @@ export const fetchJson = async function (url) {
 		throw err;
 	}
 };
+
 export const sendJson = async function (url, uploadData) {
 	try {
 		// only fetch if there is no other ongoing api call
