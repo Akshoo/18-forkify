@@ -1,21 +1,21 @@
 {
-  "name": "forkify",
-  "version": "1.0.0",
-  "description": "Recipe Application",
-  "source": "./index.html",
-  "scripts": {
-    "start": "parcel",
-    "build": "parcel build index.html --dist-dir ./dist"
-  },
-  "author": "Akshay",
-  "license": "ISC",
-  "devDependencies": {
-    "@parcel/transformer-sass": "^2.12.0"
-  },
-  "dependencies": {
-    "core-js": "^3.37.1",
-    "fractional": "^1.0.0",
-    "parcel": "^2.12.0",
-    "regenerator-runtime": "^0.14.1"
-  }
+	"name": "forkify",
+	"version": "1.0.0",
+	"description": "Recipe Application",
+	"source": "./index.html",
+	"scripts": {
+		"start": "parcel",
+		"build": "parcel build --no-cache"
+	},
+	"author": "Akshay",
+	"license": "ISC",
+	"devDependencies": {
+		"@parcel/transformer-sass": "^2.12.0"
+	},
+	"dependencies": {
+		"core-js": "^3.37.1",
+		"fractional": "^1.0.0",
+		"parcel": "^2.12.0",
+		"regenerator-runtime": "^0.14.1"
+	}
 }
