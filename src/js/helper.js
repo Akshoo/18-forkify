@@ -1,6 +1,5 @@
 import { API_KEY, TIMEOUT_ERR, TIMEOUT_SEC } from './config';
 
-
 const timeout = function (s) {
 	return new Promise(function (_, reject) {
 		setTimeout(function () {
@@ -45,6 +44,7 @@ export const sendJson = async function (url, uploadData) {
 		const data = await resp.json();
 		clear = true;
 
+		if (data?.status == 'fail') throw Error(data.message);
 		return data;
 	} catch (err) {
 		throw err;

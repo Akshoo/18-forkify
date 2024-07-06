@@ -17,25 +17,23 @@ class UserRecipeView extends View {
 		this._addModalHandler();
 	}
 	toggleModal(ev) {
-		console.log('toggled')
+		console.log('toggled');
 		// console.log(ev);
 		// console.log(this._overlay.classList, this._parentEl.classList);
 		this._overlay.classList.toggle('hidden');
 		this._parentEl.classList.toggle('hidden');
 	}
-	toggleForm(){
-
-	}
+	toggleForm() {}
 	render() {
 		this._clear();
 		const markup = this._generateMarkup();
 		this._parentEl.insertAdjacentHTML('afterbegin', markup);
 		// this._addModalHandler();
-		
+
 		this._closeBtn = this._parentEl.querySelector('.btn--close-modal');
 		this._submitRecipeBtn = this._parentEl.querySelector('.upload__btn');
 		this._formEl = this._parentEl.querySelector('.upload');
-		
+
 		this._closeBtn.addEventListener('click', this.toggleModal.bind(this));
 		this._submitRecipeBtn.addEventListener('click', ev => {
 			ev.preventDefault();
@@ -44,7 +42,6 @@ class UserRecipeView extends View {
 			this._handler(data);
 			// console.log();
 		});
-
 	}
 	_generateMarkup() {
 		return `<button class="btn--close-modal">&times;</button>
@@ -52,28 +49,28 @@ class UserRecipeView extends View {
       <div class="upload__column">
         <h3 class="upload__heading">Recipe data</h3>
         <label>Title</label>
-        <input value="TEST-123" required name="title" type="text" />
+        <input value="" required name="title" type="text" />
         <label>URL</label>
-        <input value="TEST-123" required name="sourceUrl" type="text" />
+        <input value="" required name="sourceUrl" type="text" />
         <label>Image URL</label>
-        <input value="TEST-123" required name="image" type="text" />
+        <input value="" required name="image" type="text" />
         <label>Publisher</label>
-        <input value="TEST-123" required name="publisher" type="text" />
+        <input value="" required name="publisher" type="text" />
         <label>Prep time</label>
-        <input value="23" required name="cookingTime" type="number" />
+        <input value="" required name="cookingTime" type="number" />
         <label>Servings</label>
-        <input value="23" required name="servings" type="number" />
+        <input value="" required name="servings" type="number" />
       </div>
 
       <div class="upload__column">
         <h3 class="upload__heading">Ingredients</h3>
         <label>Ingredient 1</label>
-        <input value="0.5,kg,Rice" type="text" required name="ingredient-1"
+        <input value="" type="text" required name="ingredient-1"
           placeholder="Format: 'Quantity,Unit,Description'" />
         <label>Ingredient 2</label>
-        <input value="1,,Avocado" type="text" name="ingredient-2" placeholder="Format: 'Quantity,Unit,Description'" />
+        <input value="" type="text" name="ingredient-2" placeholder="Format: 'Quantity,Unit,Description'" />
         <label>Ingredient 3</label>
-        <input value=",,salt" type="text" name="ingredient-3" placeholder="Format: 'Quantity,Unit,Description'" />
+        <input value="" type="text" name="ingredient-3" placeholder="Format: 'Quantity,Unit,Description'" />
         <label>Ingredient 4</label>
         <input type="text" name="ingredient-4" placeholder="Format: 'Quantity,Unit,Description'" />
         <label>Ingredient 5</label>
@@ -103,6 +100,7 @@ class UserRecipeView extends View {
 			ev.preventDefault();
 			const dataAr = [...new FormData(this._formEl)];
 			const data = Object.fromEntries(new FormData(this._formEl).entries());
+			console.log();
 			handler(data);
 			// console.log();
 		});

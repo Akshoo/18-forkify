@@ -11,7 +11,6 @@ import bookmarksView from './views/BookmarksView';
 import userRecipeView from './views/UserRecipeView';
 import { LOAD_BOOKMARKS_MSG } from './config';
 
-
 // https://forkify-api.herokuapp.com/v2
 // https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886
 // https://forkify-api.herokuapp.com/api/v2/recipes/664c8f193e7aa067e94e8706
@@ -44,7 +43,6 @@ const recipeHandler = async function (id) {
 		await model.loadRecipe(id);
 		recipeView.render(model.state.recipe);
 		resultView.update(model.getResultsPage());
-
 	} catch (err) {
 		recipeView.renderError(err.message);
 		console.error(err);
@@ -67,6 +65,7 @@ const pageHandler = function (goToPage) {
 };
 
 const userRecipeViewHandler = async function (data) {
+	console.log(data);
 	try {
 		userRecipeView.renderSpinner();
 		await model.uploadUserRecipe(data);
@@ -83,6 +82,10 @@ const userRecipeViewHandler = async function (data) {
 		}, 2000);
 	} catch (err) {
 		userRecipeView.renderError(err.message);
+		setTimeout(() => {
+			userRecipeView.toggleModal();
+			userRecipeView.render();
+		}, 10000);
 	}
 };
 
