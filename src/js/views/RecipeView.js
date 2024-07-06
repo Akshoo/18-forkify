@@ -13,6 +13,7 @@ class RecipeView extends View {
 	// 	sourceUrl: ,
 	// 	title: ,
 	// 	key?
+
 	// }
 	constructor() {
 		super(document.querySelector('.recipe'));
@@ -46,6 +47,7 @@ class RecipeView extends View {
 		return `
     <figure class="recipe__fig">
         <img src="${data.image}" alt="${data.title}" class="recipe__img" />
+
         <h1 class="recipe__title">
           <span>${data.title}</span>
         </h1>
@@ -57,13 +59,14 @@ class RecipeView extends View {
             <use href="${icons}#icon-clock"></use>
           </svg>
           <span class="recipe__info-data recipe__info-data--minutes">${data.cookingTime}</span>
+
           <span class="recipe__info-text">minutes</span>
         </div>
         <div class="recipe__info recipe__info-servings">
           ${this._generateServingsMarkup(data.servings)}
         </div>
-
         <div class="recipe__user-generated ${!data.key ? 'hidden' : ''}">
+
           <svg>
             <use href="${icons}#icon-user"></use>
           </svg>
@@ -90,6 +93,7 @@ class RecipeView extends View {
           directions at their website.
         </p>
         <a class="btn--small recipe__btn" href="${data.sourceUrl}"
+
           target="_blank">
           <span>Directions</span>
           <svg class="search__icon">

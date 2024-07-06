@@ -8,6 +8,7 @@ import {
 } from './config';
 import { fetchJson, sendJson } from './helper';
 
+
 export const state = {
 	recipe: {},
 	search: {
@@ -47,6 +48,7 @@ const createResultsArray = function (data) {
 		};
 	});
 };
+
 export const loadSearchResults = async function (query) {
 	try {
 		if (!query) return;
@@ -59,6 +61,7 @@ export const loadSearchResults = async function (query) {
 		//update state
 		state.search.query = query;
 		state.search.results = results;
+
 		state.page.maxPageNo = Math.ceil(data.data.recipes.length / PAGE_SLOTS);
 	} catch (err) {
 		console.error(err, '💥💥');
@@ -71,9 +74,11 @@ export const loadRecipe = async function (id) {
 
 		if (data.status == 'fail') throw Error(data.message);
 
+
 		const recipe = createrecipeobject(data);
 		//update state
 		state.recipe = recipe;
+
 		if (state.bookmarks.some(bmark => bmark.id == id)) state.recipe.bookmarked = true;
 		else state.recipe.bookmarked = false;
 	} catch (err) {
@@ -83,6 +88,7 @@ export const loadRecipe = async function (id) {
 };
 
 export const getResultsPage = function (pageNo = 1) {
+
 	state.page.pageNo = pageNo;
 	const n = PAGE_SLOTS;
 	return state.search.results.slice((pageNo - 1) * n, pageNo * n);
@@ -169,3 +175,4 @@ export const uploadUserRecipe = async function (updata) {
 };
 // loadSavedBookmarks();
 // error handling trycatch createrecipeobject sendJson
+

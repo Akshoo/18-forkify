@@ -2,6 +2,7 @@
 	"name": "forkify",
 	"version": "1.0.0",
 	"description": "Recipe Application",
+
 	"source": "./index.html",
 	"scripts": {
 		"start": "parcel",

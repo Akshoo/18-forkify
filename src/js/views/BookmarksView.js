@@ -1,6 +1,7 @@
 import View from './View';
 import icons from '../../img/icons.svg';
 
+
 class BookmarksView extends View {
 	constructor() {
 		super(document.querySelector('.bookmarks__list'));
@@ -15,6 +16,7 @@ class BookmarksView extends View {
 			}">
               <figure class="preview__fig">
                 <img src="${res.image}" alt="Test" />
+
               </figure>
               <div class="preview__data">
                 <h4 class="preview__title">${res.title}</h4>
@@ -24,6 +26,7 @@ class BookmarksView extends View {
 					  <use href="${icons}#icon-user"></use>
 				  </svg>
 				</div>
+
               </div>
             </a>
           </li>`;
