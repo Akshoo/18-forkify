@@ -1,4 +1,5 @@
-import { TIMEOUT_ERR, TIMEOUT_SEC } from './config';
+import { API_KEY, TIMEOUT_ERR, TIMEOUT_SEC } from './config';
+
 
 const timeout = function (s) {
 	return new Promise(function (_, reject) {
@@ -23,6 +24,29 @@ export const fetchJson = async function (url) {
 		return data;
 	} catch (err) {
 		clear = true;
+		throw err;
+	}
+};
+
+export const sendJson = async function (url, uploadData) {
+	try {
+		// only fetch if there is no other ongoing api call
+
+		const resp = await Promise.race([
+			fetch(`${url}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(uploadData),
+			}),
+			timeout(TIMEOUT_SEC),
+		]);
+		const data = await resp.json();
+		clear = true;
+
+		return data;
+	} catch (err) {
 		throw err;
 	}
 };

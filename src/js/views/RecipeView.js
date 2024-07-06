@@ -3,35 +3,21 @@ import icons from '../../img/icons.svg';
 import 'fractional';
 
 class RecipeView extends View {
-	// this._data is{
-	// cooking_time: ,
-	// id: "",
-	// image_url: "",
-	// ingredients: [],
-	// publisher: "",
-	// servings: ,
-	// source_url: "",
-	// title: "",
+	// // this._data is{
+	// 	id: ,
+	// 	cookingTime: ,
+	// 	image: ,
+	// 	ingredients: ,
+	// 	publisher: ,
+	// 	servings: ,
+	// 	sourceUrl: ,
+	// 	title: ,
+	// 	key?
+
 	// }
 	constructor() {
 		super(document.querySelector('.recipe'));
 	}
-
-	// renderUpdatedIngredients() {
-	// 	this._updateServings();
-	// 	const markup = this._generateIngredientMarkup(this._data.ingredients);
-	// 	const ingredientList = this._parentEl.querySelector('.recipe__ingredient-list');
-
-	// 	ingredientList.innerHTML = '';
-	// 	ingredientList.insertAdjacentHTML('afterbegin', markup);
-	// }
-	// _updateServings() {
-	// 	const markup = this._generateServingsMarkup();
-	// 	const servingsEl = this._parentEl.querySelector('.recipe__info-servings');
-
-	// 	servingsEl.innerHTML = '';
-	// 	servingsEl.insertAdjacentHTML('afterbegin', markup);
-	// }
 
 	addRecipeHandler(handler) {
 		['hashchange', 'load'].forEach(onE => {
@@ -60,7 +46,8 @@ class RecipeView extends View {
 		const data = this._data;
 		return `
     <figure class="recipe__fig">
-        <img src="${data.image_url}" alt="${data.title}" class="recipe__img" />
+        <img src="${data.image}" alt="${data.title}" class="recipe__img" />
+
         <h1 class="recipe__title">
           <span>${data.title}</span>
         </h1>
@@ -71,14 +58,15 @@ class RecipeView extends View {
           <svg class="recipe__info-icon">
             <use href="${icons}#icon-clock"></use>
           </svg>
-          <span class="recipe__info-data recipe__info-data--minutes">${data.cooking_time}</span>
+          <span class="recipe__info-data recipe__info-data--minutes">${data.cookingTime}</span>
+
           <span class="recipe__info-text">minutes</span>
         </div>
         <div class="recipe__info recipe__info-servings">
           ${this._generateServingsMarkup(data.servings)}
         </div>
+        <div class="recipe__user-generated ${!data.key ? 'hidden' : ''}">
 
-        <div class="recipe__user-generated hidden">
           <svg>
             <use href="${icons}#icon-user"></use>
           </svg>
@@ -104,7 +92,8 @@ class RecipeView extends View {
           <span class="recipe__publisher">${data.publisher}</span>. Please check out
           directions at their website.
         </p>
-        <a class="btn--small recipe__btn" href="${data.source_url}"
+        <a class="btn--small recipe__btn" href="${data.sourceUrl}"
+
           target="_blank">
           <span>Directions</span>
           <svg class="search__icon">
