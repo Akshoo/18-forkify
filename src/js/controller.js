@@ -4,34 +4,36 @@ import recipeView from './views/RecipeView';
 import searchView from './views/SearchView';
 import pageView from './views/PageView';
 import bookmarksView from './views/BookmarksView';
+import userRecipeView from './views/UserRecipeView';
+import { LOAD_BOOKMARKS_MSG } from './config';
 
 // https://forkify-api.herokuapp.com/v2
 // https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886
 // https://forkify-api.herokuapp.com/api/v2/recipes/664c8f193e7aa067e94e8706
 
 // if (module.hot) module.hot.accept();
-///////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 const servingsHandler = function (serving) {
 	model.loadIngredientsPerServe(serving);
 	recipeView.update(model.state.recipe);
 };
 const bookmarksHandler = function () {
-	console.log(model.state.recipe.bookmarked);
 	if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
 	else model.deleteBookmark(model.state.recipe.id);
 
 	recipeView.update();
-	bookmarksView.render(model.state.bookmarks);
+	if (model.state.bookmarks.length == 0) bookmarksView.renderMessage(LOAD_BOOKMARKS_MSG);
+	else bookmarksView.render(model.state.bookmarks);
 };
 const recipeHandler = async function (id) {
-	if (!id) return recipeView.renderMessage();
+	model.loadSavedBookmarks();
+	if (model.state.bookmarks.length == 0) bookmarksView.renderMessage(LOAD_BOOKMARKS_MSG);
+	else bookmarksView.render(model.state.bookmarks);
 
+	if (!id) return recipeView.renderMessage();
 	recipeView.renderSpinner();
 	try {
-		model.loadSavedBookmarks();
-		bookmarksView.render(model.state.bookmarks);
-
 		await model.loadRecipe(id);
 		recipeView.render(model.state.recipe);
 		resultView.update(model.getResultsPage());
@@ -56,6 +58,27 @@ const pageHandler = function (goToPage) {
 	pageView.render(model.state.page);
 };
 
+const userRecipeViewHandler = async function (data) {
+	try {
+		userRecipeView.renderSpinner();
+		await model.uploadUserRecipe(data);
+		bookmarksView.render(model.state.bookmarks);
+		userRecipeView.renderMessage('Recipe uploaded successfully!');
+		setTimeout(() => {
+			userRecipeView.toggleModal();
+
+			// recipeView.render(model.state.recipe);// <- does not updates the hash in the page
+			// window.location.hash = model.state.recipe.id;
+			window.history.pushState(null, '', model.state.recipe.id);
+
+			userRecipeView.render();
+		}, 2000);
+	} catch (err) {
+		userRecipeView.renderError(err.message);
+	}
+};
+
+////////////////////////////////////////////////////////////
 const init = function () {
 	recipeView.addRecipeHandler(recipeHandler);
 	recipeView.addServingsHandler(servingsHandler);
@@ -63,6 +86,7 @@ const init = function () {
 
 	searchView.addSearchHandler(searchHandler);
 	pageView.addPageHandler(pageHandler);
+	userRecipeView.addUserRecipeViewHandler(userRecipeViewHandler);
 };
 init();
 // localStorage.clear();
