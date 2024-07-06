@@ -1,3 +1,6 @@
+import 'corejs/stable';
+import 'regenerator-runtime/runtime';
+
 import * as model from '../js/model';
 import resultView from './views/ResultView';
 import recipeView from './views/RecipeView';
